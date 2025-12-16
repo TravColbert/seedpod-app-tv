@@ -1,16 +1,112 @@
-.library 
-  h1 Media Library
-  p This is the library page.
-  each file in data
-    div.item
-      h3= file.name
-      p= file.path
-      .controls 
-        a(href=`/library/${file.name}/play`) Play
-        a(href=`/library/${file.name}/pause`) Pause
-        a(href=`/library/${file.name}/stop`) Stop
-        a(href=`/library/${file.name}/status`) Status
-        a(href=`/library/${file.name}/volume-up`) Volume Up
-        a(href=`/library/${file.name}/volume-down`) Volume Down
-        a(href=`/library/${file.name}/seek-forward`) Seek Forward
-        a(href=`/library/${file.name}/seek-backward`) Seek Backward
+extends layout-default.pug
+
+block body
+  body
+    .page-container
+      //- Top Toolbar
+      header.top-toolbar
+        .toolbar-content
+          a.toolbar-brand(href='#') MediaLib
+          
+          .search-container
+            span.search-icon 🔍
+            input.search-input(
+              type='search'
+              placeholder='Search media...'
+              aria-label='Search'
+            )
+          
+          nav
+            ul.nav-menu#navMenu
+              li
+                a(href='/') Home
+              li
+                a(href='/library') Library
+              li
+                a(href='/favorites') Favorites
+              li
+                a(href='/settings') Settings
+          
+          button.menu-toggle#menuToggle(
+            aria-label='Toggle menu'
+            aria-expanded='false'
+          ) ☰
+
+      //- Main Content
+      main.main-content
+        ul.media-list
+          each file in data
+            li.media-item 
+              img.media-thumbnail(
+                src='https://via.placeholder.com/150'
+                alt=`Thumbnail for ${file.name}`
+              )
+              .media-info
+                h3.media-title= file.name
+                p.media-description= file.path
+                .media-controls 
+                  a(href=`/library/${file.name}/play`) Play
+                  a(href=`/library/${file.name}/pause`) Pause
+                  a(href=`/library/${file.name}/stop`) Stop
+                  a(href=`/library/${file.name}/status`) Status
+                  a(href=`/library/${file.name}/volume-up`) Volume Up
+                  a(href=`/library/${file.name}/volume-down`) Volume Down
+                  a(href=`/library/${file.name}/seek-forward`) Seek Forward
+                  a(href=`/library/${file.name}/seek-backward`) Seek Backward
+
+      //- Bottom Toolbar
+      footer.bottom-toolbar
+        .bottom-toolbar-content
+          a.toolbar-action.active(href='#home')
+            span.toolbar-action-icon 🏠
+            span.toolbar-action-label Home
+          
+          a.toolbar-action(href='#explore')
+            span.toolbar-action-icon 🔍
+            span.toolbar-action-label Explore
+          
+          a.toolbar-action(href='#upload')
+            span.toolbar-action-icon ➕
+            span.toolbar-action-label Upload
+          
+          a.toolbar-action(href='#notifications')
+            span.toolbar-action-icon 🔔
+            span.toolbar-action-label Alerts
+          
+          a.toolbar-action(href='#profile')
+            span.toolbar-action-icon 👤
+            span.toolbar-action-label Profile
+
+    script.
+      // Mobile menu toggle functionality
+      const menuToggle = document.getElementById('menuToggle');
+      const navMenu = document.getElementById('navMenu');
+      
+      menuToggle.addEventListener('click', function() {
+        navMenu.classList.toggle('open');
+        const isOpen = navMenu.classList.contains('open');
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        menuToggle.textContent = isOpen ? '✕' : '☰';
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const isClickInsideMenu = navMenu.contains(event.target);
+        const isClickOnToggle = menuToggle.contains(event.target);
+        
+        if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('open')) {
+          navMenu.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menuToggle.textContent = '☰';
+        }
+      });
+      
+      // Handle bottom toolbar active state
+      const toolbarActions = document.querySelectorAll('.toolbar-action');
+      toolbarActions.forEach(action => {
+        action.addEventListener('click', function(e) {
+          e.preventDefault();
+          toolbarActions.forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });

@@ -1,0 +1,396 @@
+/* ===== CSS Variables ===== */
+:root {
+  /* Colors */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1e40af;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-text: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Layout */
+  --toolbar-height: 60px;
+  --toolbar-padding: 1rem;
+  --max-content-width: 1200px;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-lg: 18px;
+  
+  /* Effects */
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  --shadow-sm: 0 1px 3px var(--color-shadow);
+  --shadow-md: 0 4px 6px var(--color-shadow);
+}
+
+/* ===== Reset & Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===== Layout Structure ===== */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: var(--toolbar-height);
+  padding-bottom: var(--toolbar-height);
+}
+
+/* ===== Top Toolbar ===== */
+.top-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--toolbar-height);
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--toolbar-padding);
+  transition: all var(--transition-speed) ease;
+}
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+/* Logo/Brand */
+.toolbar-brand {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Search Field */
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-left: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  background-color: var(--color-surface);
+  transition: all var(--transition-speed) ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: var(--color-background);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+/* Menu Toggle Button (Mobile) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: 24px;
+}
+
+/* Navigation Menu */
+.nav-menu {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  list-style: none;
+}
+
+.nav-menu li a {
+  color: var(--color-text);
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.nav-menu li a:hover {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+}
+
+/* ===== Main Content Area ===== */
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+}
+
+/* Media List */
+.media-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  list-style: none;
+}
+
+.media-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: all var(--transition-speed) ease;
+  cursor: pointer;
+}
+
+.media-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.media-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background-color: var(--color-border);
+}
+
+.media-info {
+  padding: var(--spacing-md);
+}
+
+.media-title {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+}
+
+.media-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ===== Bottom Toolbar ===== */
+.bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--toolbar-height);
+  background-color: var(--color-background);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -1px 3px var(--color-shadow);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--toolbar-padding);
+}
+
+.bottom-toolbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 600px;
+  gap: var(--spacing-md);
+}
+
+.toolbar-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-speed) ease;
+  border-radius: var(--border-radius);
+  flex: 1;
+  text-align: center;
+}
+
+.toolbar-action:hover,
+.toolbar-action.active {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.toolbar-action-icon {
+  font-size: 24px;
+}
+
+.toolbar-action-label {
+  font-size: 12px;
+}
+
+/* ===== Mobile Styles ===== */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    order: 3;
+  }
+  
+  .search-container {
+    order: 2;
+    max-width: none;
+  }
+  
+  .toolbar-brand {
+    order: 1;
+  }
+  
+  .nav-menu {
+    position: fixed;
+    top: var(--toolbar-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md);
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all var(--transition-speed) ease;
+  }
+  
+  .nav-menu.open {
+    max-height: 400px;
+    opacity: 1;
+  }
+  
+  .nav-menu li {
+    width: 100%;
+  }
+  
+  .nav-menu li a {
+    display: block;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .nav-menu li:last-child a {
+    border-bottom: none;
+  }
+  
+  .media-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .main-content {
+    padding: var(--spacing-md);
+  }
+}
+
+/* ===== Desktop Enhancements ===== */
+@media (min-width: 769px) {
+  .toolbar-content {
+    gap: var(--spacing-lg);
+  }
+  
+  .media-list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+/* ===== Utility Classes ===== */
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ===== Loading State ===== */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}

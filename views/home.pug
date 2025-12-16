@@ -1,0 +1,106 @@
+extends layout-default.pug
+
+block content
+  //- Hero Section
+  section.hero
+    .hero-container
+      h1.hero-title Build Faster, Code Smarter
+      p.hero-subtitle
+        | An open source toolkit designed to streamline your development workflow 
+        | and boost productivity with modern, intuitive features.
+      
+      .hero-buttons
+        a.btn.btn-primary(href='#download')
+          span Get Started
+          span →
+        a.btn.btn-secondary(href='#documentation')
+          span View Documentation
+
+  //- Features Section
+  section.features#features
+    .section-container
+      .section-header
+        h2.section-title Powerful Features
+        p.section-description
+          | Everything you need to build amazing applications, all in one place.
+      
+      .features-grid
+        .feature-card
+          .feature-icon 🎯
+          h3.feature-title Lightning Fast
+          p.feature-description
+            | Optimized performance ensures your applications run at peak speed, 
+            | delivering exceptional user experiences every time.
+        
+        .feature-card
+          .feature-icon 🔒
+          h3.feature-title Secure by Default
+          p.feature-description
+            | Built with security best practices in mind. Regular audits and 
+            | updates keep your projects protected against vulnerabilities.
+        
+        .feature-card
+          .feature-icon 🎨
+          h3.feature-title Highly Customizable
+          p.feature-description
+            | Extensive configuration options and plugin system let you tailor 
+            | the tool to your exact needs and workflow preferences.
+        
+        .feature-card
+          .feature-icon 📦
+          h3.feature-title Easy Integration
+          p.feature-description
+            | Seamlessly integrates with your existing tools and workflows. 
+            | Works with all major platforms and frameworks out of the box.
+        
+        .feature-card
+          .feature-icon 🌐
+          h3.feature-title Active Community
+          p.feature-description
+            | Join thousands of developers worldwide. Get help, share ideas, 
+            | and contribute to making the project even better.
+        
+        .feature-card
+          .feature-icon 📚
+          h3.feature-title Great Documentation
+          p.feature-description
+            | Comprehensive guides, tutorials, and API references make it easy 
+            | to get started and master advanced features.
+
+  //- About Section
+  section.about#about
+    .section-container
+      .about-content
+        .about-text
+          h2 Open Source, Open Future
+          p
+            | We believe in the power of community-driven development. Our project 
+            | is completely open source, allowing developers worldwide to contribute, 
+            | customize, and improve the codebase.
+          p
+            | With transparent development, regular releases, and a commitment to 
+            | backwards compatibility, you can trust that your investment in our 
+            | tool will stand the test of time.
+          p
+            | Join us in building the future of development tools. Whether you're 
+            | fixing bugs, adding features, or improving documentation, every 
+            | contribution makes a difference.
+          
+          a.btn.btn-primary(href='#contribute') Start Contributing
+        
+        .about-image
+          .about-image-placeholder
+            p 💻
+            p Code visualization or screenshot would go here
+
+  //- CTA Section
+  section.cta
+    .section-container
+      h2 Ready to Get Started?
+      p Download now and join thousands of developers building amazing things.
+      
+      .hero-buttons
+        a.btn.btn-primary(href='#download') Download Now
+        a.btn.btn-secondary(href='https://github.com') View on GitHub
+
+//- The script tag needs to be outside the main structure, ideally before </body> if this were a full HTML file.

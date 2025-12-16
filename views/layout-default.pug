@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+  include _includes/head.pug
+  block body
+    body
+      header
+        .nav-container
+          a.nav-logo(href="/") #{appName || 'Node.js Express Mongoose Starter'}
+          nav.nav-links
+            a.nav-link(href="/") Home
+            a.nav-link(href="/library") Library
+            a.nav-link(href="/about") About
+
+      main
+        block content
+
+      footer
+        .footer-container
+          p &copy; #{new Date().getFullYear()} #{appName || 'Node.js Express Mongoose Starter'}. All rights reserved.
+          nav.footer-links
+            a.footer-link(href="/privacy") Privacy Policy
+            a.footer-link(href="/terms") Terms of Service
