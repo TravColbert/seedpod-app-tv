@@ -112,7 +112,7 @@ module.exports = function (app) {
     },
     seekPlus10seconds: async function (req, res) {
       console.log("Seeking forward 10 seconds in VLC")
-      const response = await fetch(`${app.locals.vlcUrl}?seek&val=+10S`, {
+      const response = await fetch(`${app.locals.vlcUrl}?seek&val=+10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')
@@ -123,7 +123,7 @@ module.exports = function (app) {
     },
     seekMinus10seconds: async function (req, res) {
       console.log("Seeking backward 10 seconds in VLC")
-      const response = await fetch(`${app.locals.vlcUrl}?seek&val=-10S`, {
+      const response = await fetch(`${app.locals.vlcUrl}?seek&val=-10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')

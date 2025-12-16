@@ -26,10 +26,10 @@ module.exports = function (app) {
   router.route("/library/:id/volume-down")
     .get(controller.volumeDown)
 
-  router.route("/library/:id/seekForward")
+  router.route("/library/:id/seek-forward")
     .get(controller.seekPlus10seconds)
 
-  router.route("/library/:id/seekBackward")
+  router.route("/library/:id/seek-backward")
     .get(controller.seekMinus10seconds)
 
   router.route("/library")
