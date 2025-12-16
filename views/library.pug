@@ -1,0 +1,10 @@
+.library 
+  h1 Media Library
+  p This is the library page.
+  each file in data
+    div.item
+      h3= file.name
+      p= file.path
+      .controls 
+        a(href=`/library/${file.name}/play`) Play
+        a(href=`/library/${file.name}/stop`) Stop
