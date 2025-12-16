@@ -14,6 +14,15 @@ module.exports = function (app) {
   router.route("/library/:id/play")
     .get(controller.play)
 
+  router.route("/library/:id/status")
+    .get(controller.status)
+
+  router.route("/library/:id/volume-up")
+    .get(controller.volumeUp)
+
+  router.route("/library/:id/volume-down")
+    .get(controller.volumeDown)
+
   router.route("/library")
     .get(controller.library)
 
