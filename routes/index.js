@@ -27,10 +27,10 @@ module.exports = function (app) {
     .get(controller.volumeDown)
 
   router.route("/library/:id/seek-forward")
-    .get(controller.seekPlus10seconds)
+    .get(controller.seekPlus10Seconds)
 
   router.route("/library/:id/seek-backward")
-    .get(controller.seekMinus10seconds)
+    .get(controller.seekMinus10Seconds)
 
   router.route("/library")
     .get(controller.library)

@@ -90,7 +90,7 @@ module.exports = function (app) {
     },
     volumeUp: async function (req, res) {
       console.log("Increasing VLC volume")
-      const response = await fetch(`${app.locals.vlcUrl}?volume&val=+10`, {
+      const response = await fetch(`${app.locals.vlcUrl}?volume&val=%2B10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')
@@ -101,7 +101,7 @@ module.exports = function (app) {
     },
     volumeDown: async function (req, res) {
       console.log("Decreasing VLC volume")
-      const response = await fetch(`${app.locals.vlcUrl}?volume&val=-10`, {
+      const response = await fetch(`${app.locals.vlcUrl}?volume&val=%2D10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')
@@ -110,9 +110,9 @@ module.exports = function (app) {
       console.log("VLC response:", await response.text())
       res.json({ status: "volume decreased" })
     },
-    seekPlus10seconds: async function (req, res) {
+    seekPlus10Seconds: async function (req, res) {
       console.log("Seeking forward 10 seconds in VLC")
-      const response = await fetch(`${app.locals.vlcUrl}?seek&val=+10`, {
+      const response = await fetch(`${app.locals.vlcUrl}?seek&val=%2B10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')
@@ -121,9 +121,9 @@ module.exports = function (app) {
       console.log("VLC response:", await response.text())
       res.json({ status: "seeked forward 10 seconds" })
     },
-    seekMinus10seconds: async function (req, res) {
+    seekMinus10Seconds: async function (req, res) {
       console.log("Seeking backward 10 seconds in VLC")
-      const response = await fetch(`${app.locals.vlcUrl}?seek&val=-10`, {
+      const response = await fetch(`${app.locals.vlcUrl}?seek&val=%2D10`, {
         method: 'GET',
         headers: {
           'Authorization': 'Basic ' + Buffer.from(`:${app.locals.vlcPassword}`).toString('base64')
