@@ -1,0 +1,41 @@
+#main-top-nav {
+  top: 0;
+  position: sticky;
+  background-color: rgb(19, 22.5, 30.5);
+  z-index: 1000;
+}
+
+#main-top-nav nav {
+  justify-content: space-around;
+}
+
+.media-item > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.media-thumbnail {
+  width: 92px;
+  height: 138px;
+  margin: 0;
+  margin-right: 1rem;
+}
+
+.media-info {
+  margin: 0;
+  width: 100%;
+}
+
+.media-title {
+  margin-bottom: 0;
+}
+
+.media-info details {
+  margin: 0;
+}
+
+.media-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

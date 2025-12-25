@@ -1,83 +1,85 @@
 extends layout-default.pug
 
-block body
-  body
-    .page-container
-      //- Top Toolbar
-      header.top-toolbar
-        .toolbar-content
-          a.toolbar-brand(href='#') MediaLib
+block head
+  script(defer src="https://unpkg.com/htmx.org@2.0.4", integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+", crossorigin="anonymous")
+  link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+  link(rel="stylesheet" href="/css/tv.css")
 
-          .search-container
-            span.search-icon 🔍
-            input.search-input(
-              name='search'
-              type='search'
-              placeholder='Search media...'
-              aria-label='Search'
-              hx-get="/library"
-              hx-trigger="input delay:1s"
-              hx-target=".main-content"
-              hx-select=".media-list"
-            )
+block nav
+  header#main-top-nav
+    nav
+      ul
+        li
+          strong
+            a(href="/") #{appName || 'Node.js Express Mongoose Starter'}
+      ul
+        li.search-container.input-group.input-inline
+          input.search-input.form-input(
+            name='search'
+            type='search'
+            placeholder='Search media...'
+            aria-label='Search'
+            hx-get="/library"
+            hx-trigger="input delay:1s"
+            hx-target=".main-content"
+            hx-select=".media-list"
+          )
+      ul
+        li
+          a.btn.btn-link(href="/library/favorites") Favorites
+        li
+          a.btn.btn-link(href='#documentation') Docs
+        li
+          a.btn.btn-link(href="/about") About
 
-          nav
-            ul.nav-menu#navMenu
-              li
-                a(href='/') Home
-              li
-                a(href='/library') Library
-              li
-                a(href='/favorites') Favorites
-              li
-                a(href='/settings') Settings
+block content
+  main.container
+    //- Main Content
+    main.main-content(
+      hx-get="/library"
+      hx-trigger="load"
+      hx-select=".media-list"
+      hx-select-oob="#bottom-toolbar")
 
-          button.menu-toggle#menuToggle(
-            aria-label='Toggle menu'
-            aria-expanded='false'
-          ) ☰
+    dialog#media-info-dialog
+      p This is text
+      button Close
 
-      //- Main Content
-      main.main-content(
-        hx-get="/library"
-        hx-trigger="load"
-        hx-select=".media-list"
-        hx-select-oob="#bottom-toolbar")
+    //- Bottom Toolbar
+    footer#bottom-toolbar
+      p Disconnected
 
-      //- Bottom Toolbar
-      footer#bottom-toolbar
-        p Disconnected
+block footScripts
+  script.
+    // Mobile menu toggle functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
 
-    script.
-      // Mobile menu toggle functionality
-      const menuToggle = document.getElementById('menuToggle');
-      const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', function() {
+      navMenu.classList.toggle('open');
+      const isOpen = navMenu.classList.contains('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      menuToggle.textContent = isOpen ? '✕' : '☰';
+    });
 
-      menuToggle.addEventListener('click', function() {
-        navMenu.classList.toggle('open');
-        const isOpen = navMenu.classList.contains('open');
-        menuToggle.setAttribute('aria-expanded', isOpen);
-        menuToggle.textContent = isOpen ? '✕' : '☰';
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const isClickInsideMenu = navMenu.contains(event.target);
+      const isClickOnToggle = menuToggle.contains(event.target);
+
+      if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('open')) {
+        navMenu.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.textContent = '☰';
+      }
+    });
+
+    // Handle bottom toolbar active state
+    const toolbarActions = document.querySelectorAll('.toolbar-action');
+    toolbarActions.forEach(action => {
+      action.addEventListener('click', function(e) {
+        e.preventDefault();
+        toolbarActions.forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
       });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function(event) {
-        const isClickInsideMenu = navMenu.contains(event.target);
-        const isClickOnToggle = menuToggle.contains(event.target);
-
-        if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          menuToggle.setAttribute('aria-expanded', 'false');
-          menuToggle.textContent = '☰';
-        }
-      });
-
-      // Handle bottom toolbar active state
-      const toolbarActions = document.querySelectorAll('.toolbar-action');
-      toolbarActions.forEach(action => {
-        action.addEventListener('click', function(e) {
-          e.preventDefault();
-          toolbarActions.forEach(a => a.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
+    });

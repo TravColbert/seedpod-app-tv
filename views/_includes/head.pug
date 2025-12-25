@@ -5,7 +5,7 @@ head(lang=lang || "en", itemscope="itemscope", itemtype="http://schema.org/WebSi
   - var appName = appName || 'Node.js Express Mongoose Starter'
   - var description = [(appDescription || 'Node.js Express Mongoose Starter'), description].filter(element => { return (element || element?.trim() != "")}).join(' - ')
   - var keywords = [keywords, (appKeywords || "nodejs, express, starter")].join(', ')
-  - var title = appName + ' :: ' + title
+  - var title = appName + ' :: ' + ( title || '' )
 
   title= title
   meta(name="keywords", content= keywords)
@@ -17,9 +17,6 @@ head(lang=lang || "en", itemscope="itemscope", itemtype="http://schema.org/WebSi
   meta(itemprop="image", content="/logo.png")
 
   link(rel="alternate", type="application/json+oembed", href="https://getoutofmyhead.dev/oembed_link.json", title= title)
-  link(rel="stylesheet", href="/css/app.css")
-
-  script(defer src="https://unpkg.com/htmx.org@2.0.4", integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+", crossorigin="anonymous")
 
   block head
     //- Define extra scripts and links in the 'head' block

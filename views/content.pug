@@ -1,20 +1,55 @@
-ul.media-list
+.media-list
   if library
     if library.length > 0
       each file in library
-        li.media-item(
-          hx-get=`/library/${file.id}/play`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
-          hx-swap="outerHTML"
-        )
-          img.media-thumbnail(
-            src=file.poster
-            alt=`Thumbnail for ${file.title}`
-          )
-          .media-info
-            h3.media-title= file.title
-            p.media-description= file.description
+        article.media-item(id=`media-item-${file.id}`)
+          div
+            img.media-thumbnail(
+              src= file.poster
+              alt=`Thumbnail for ${file.title}`
+              hx-get=`/library/${file.id}/play`
+              hx-target="#bottom-toolbar"
+              hx-select="#bottom-toolbar"
+              hx-swap="outerHTML"
+            )
+            article.media-info.tile-content
+              header
+                h3.media-title= file.title
+                small.media-path
+                  i= file.path
+              .media-description= file.description
+              .media-search-term= file.searchTitle
+          footer.media-controls
+            - const action = status.name == file.name ? `/library/stop` : `/library/${file.id}/play`
+            - const actionText = status.name == file.name ? "Stop" : "Play"
+            button(
+              hx-get= action
+              hx-target=".media-list"
+              hx-select=".media-list"
+              hx-swap="outerHTML"
+            )= actionText
+            details.dropdown
+              summary More
+              ul
+                li
+                  a(
+                    hx-get=`/library/${file.id}/edit`
+                    hx-target="#media-info-dialog"
+                    hx-swap="outerHTML"
+                  ) Edit
+                  a(
+                    hx-get=`/library/${file.id}/info`
+                    hx-target="#media-info-dialog"
+                    hx-swap="outerHTML"
+                  ) Info
+                  a(
+                    hx-get=`/library/${file.id}/resync`
+                    hx-target="#media-info-dialog"
+                    hx-swap="outerHTML"
+                  ) Resync
+                  a(
+                    hx-get=`/library/${file.id}/favorite`
+                  ) Favorite
   else
     .empty
       h3 No files found
