@@ -1,0 +1,47 @@
+- const action = status.name == file.name ? `/library/stop` : `/library/${file.id}/play`
+- const actionText = status.name == file.name ? "Stop" : "Play"
+article.media-item(id=`media-item-${file.id}` class= file.tmdbId ? "found" : "not-found")
+  img.media-thumbnail(
+    src= file.poster
+    hx-get=`/library/${file.id}/${action}`
+    hx-confirm=`Want to ${actionText.toLowerCase()} ${file.title}?`
+    hx-target="#media-control"
+    hx-select="#media-control"
+    hx-swap="outerHTML"
+  )
+  article.media-info.tile-content
+    header
+      h3.media-title= file.title
+      small.media-path
+        i= file.path
+    main
+      .media-description= file.description || `No description found`
+      //.media-search-term= file.searchTitle
+    footer.media-controls
+      button.play-stop-button(
+        hx-get= action
+        hx-target="#media-control"
+        hx-select="#media-control"
+        hx-swap="outerHTML"
+      )= actionText
+      button.favorite-button(
+        hx-get=`/library/${file.id}/favorite`
+      ) Fav
+      button.edit-button(
+        hx-get=`/library/${file.id}/edit`
+        hx-target=`#media-item-${file.id}`
+        hx-swap="outerHTML"
+      ) Edit
+      button.info-button(
+        hx-get=`/library/${file.id}/info`
+        hx-target=`#media-item-${file.id}`
+        hx-swap="outerHTML"
+      ) Info
+      button.resync-button(
+        hx-get=`/library/${file.id}/resync`
+        hx-target=`#media-item-${file.id}`
+        hx-swap="outerHTML"
+      ) Sync
+      button.preferred-button(
+        hx-get=`/library/${file.id}/preferred`
+      ) Pref

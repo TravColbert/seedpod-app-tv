@@ -1,0 +1,26 @@
+article.media-item.editing(id=`media-item-${file.id}`)
+  img.media-thumbnail
+  article.media-info.tile-content
+    form(
+      hx-post=`/library/${file.id}`
+      hx-target=`#media-item-${file.id}`
+      hx-select=`#media-item-${file.id}`
+      hx-swap=`outerHTML`
+    )
+      header
+        h3.media-title= file.title
+        input(
+          type=""
+          id=`search-title-${file.id}`
+          name="movie[search-title]"
+          placeholder="search term"
+          value= file.searchTitle
+        )
+      main
+      footer.media-controls
+        button.submit-stop-button(type="submit") Submit
+        button.cancel-button(
+          hx-get=`/library/${file.id}`
+          hx-target=`#media-item-${file.id}`
+          hx-swap="outerHTML"
+        ) Cancel

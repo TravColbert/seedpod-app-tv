@@ -1,126 +1,83 @@
-.media-list
+section#media-list
   if library
     if library.length > 0
       each file in library
-        article.media-item(id=`media-item-${file.id}`)
-          div
-            img.media-thumbnail(
-              src= file.poster
-              alt=`Thumbnail for ${file.title}`
-              hx-get=`/library/${file.id}/play`
-              hx-target="#bottom-toolbar"
-              hx-select="#bottom-toolbar"
-              hx-swap="outerHTML"
-            )
-            article.media-info.tile-content
-              header
-                h3.media-title= file.title
-                small.media-path
-                  i= file.path
-              .media-description= file.description
-              .media-search-term= file.searchTitle
-          footer.media-controls
-            - const action = status.name == file.name ? `/library/stop` : `/library/${file.id}/play`
-            - const actionText = status.name == file.name ? "Stop" : "Play"
-            button(
-              hx-get= action
-              hx-target=".media-list"
-              hx-select=".media-list"
-              hx-swap="outerHTML"
-            )= actionText
-            details.dropdown
-              summary More
-              ul
-                li
-                  a(
-                    hx-get=`/library/${file.id}/edit`
-                    hx-target="#media-info-dialog"
-                    hx-swap="outerHTML"
-                  ) Edit
-                  a(
-                    hx-get=`/library/${file.id}/info`
-                    hx-target="#media-info-dialog"
-                    hx-swap="outerHTML"
-                  ) Info
-                  a(
-                    hx-get=`/library/${file.id}/resync`
-                    hx-target="#media-info-dialog"
-                    hx-swap="outerHTML"
-                  ) Resync
-                  a(
-                    hx-get=`/library/${file.id}/favorite`
-                  ) Favorite
+        include movie
   else
     .empty
       h3 No files found
 
-- console.log(status?.state?.toLowerCase())
 - const playState = (status?.state?.toLowerCase() != "stopped")
-- console.log(playState)
-- const refreshTime = (["playing"].includes(status?.state?.toLowerCase())) ? 1 : 5
+- const refreshTime = (["playing"].includes(status?.state?.toLowerCase())) ? 1 : 50
 - console.log("Refresh time:", refreshTime)
-footer#bottom-toolbar
+
+#media-control
   if playState
-    .bottom-toolbar-content(
+    .toolbar-content(
       hx-get="/library/status"
       hx-trigger=`every ${refreshTime}s`
-      hx-target="#bottom-toolbar"
-      hx-select="#bottom-toolbar"
+      hx-target="#media-control"
+      hx-select="#media-control"
       hx-swap="outerHTML")
       .playing-info
-        div.playing-file-name
+        div#playing-file-name
           span= status.name
-        div.playing-file-state
+        div#playing-file-state
           span= status.state
-        div.playing-file-info
-          div
+        div#playing-file-info
+          div#status-playtime
             span #{status.time} of #{status.length}
-          div
+          div#status-position
             span= status.position
-          div
+          div#status-volume
             span= status.volume
       .playing-controls
-        a.toolbar-action(
-          hx-get=`/library/pause`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
-          hx-swap="outerHTML")
-          span.toolbar-action-icon &#x23EF;
-          span.toolbar-action-label Pause
-        a.toolbar-action(
-          hx-get=`/library/stop`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
-          hx-swap="outerHTML")
-          span.toolbar-action-icon &#x23F9;
-          span.toolbar-action-label Stop
-        a.toolbar-action(
+        div.toolbar-action#button-vol-down(
           hx-get=`/library/volume-down`
           hx-target="#bottom-toolbar"
           hx-select="#bottom-toolbar"
           hx-swap="outerHTML")
-          span.toolbar-action-icon 🔉
-          span.toolbar-action-label Vol Down
-        a.toolbar-action(
+          div.toolbar-action-icon 🔉
+          div.toolbar-action-label Vol Down
+        div.toolbar-action#button-vol-up(
           hx-get=`/library/volume-up`
           hx-target="#bottom-toolbar"
           hx-select="#bottom-toolbar"
           hx-swap="outerHTML")
-          span.toolbar-action-icon 🔊
-          span.toolbar-action-label Vol Up
-        a.toolbar-action(
+          div.toolbar-action-icon 🔊
+          div.toolbar-action-label Vol Up
+        div.toolbar-action#button-pause(
+          hx-get=`/library/pause`
+          hx-target="#bottom-toolbar"
+          hx-select="#bottom-toolbar"
+          hx-swap="outerHTML")
+          div.toolbar-action-icon &#x23EF;
+          div.toolbar-action-label Pause
+        div.toolbar-action#button-stop(
+          hx-get=`/library/stop`
+          hx-target="#bottom-toolbar"
+          hx-select="#bottom-toolbar"
+          hx-swap="outerHTML")
+          div.toolbar-action-icon &#x23F9;
+          div.toolbar-action-label Stop
+        div.toolbar-action#button-seek-back(
           hx-get=`/library/seek-backward`
           hx-target="#bottom-toolbar"
           hx-select="#bottom-toolbar"
           hx-swap="outerHTML")
-          span.toolbar-action-icon &#x23EA
-          span.toolbar-action-label -10s
-        a.toolbar-action(
+          div.toolbar-action-icon &#x23EA
+          div.toolbar-action-label -10s
+        div.toolbar-action#button-seek-forward(
           hx-get=`/library/seek-forward`
           hx-target="#bottom-toolbar"
           hx-select="#bottom-toolbar"
           hx-swap="outerHTML")
-          span.toolbar-action-icon &#x23E9
-          span.toolbar-action-label +10s
+          div.toolbar-action-icon &#x23E9
+          div.toolbar-action-label +10s
   else
-    p Stopped or Disconnected
+    .toolbar-content(
+      hx-get="/library/status"
+      hx-select="#media-control"
+      hx-trigger="every 5s"
+    )
+      p Stopped or Disconnected

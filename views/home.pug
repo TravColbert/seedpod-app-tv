@@ -2,17 +2,18 @@ extends layout-default.pug
 
 block head
   script(defer src="https://unpkg.com/htmx.org@2.0.4", integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+", crossorigin="anonymous")
-  link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+  //- link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+  link(rel="stylesheet" href="/css/reset.css")
   link(rel="stylesheet" href="/css/tv.css")
 
 block nav
   header#main-top-nav
     nav
-      ul
+      ul#nav-masthead
         li
           strong
             a(href="/") #{appName || 'Node.js Express Mongoose Starter'}
-      ul
+      ul#nav-search
         li.search-container.input-group.input-inline
           input.search-input.form-input(
             name='search'
@@ -21,31 +22,38 @@ block nav
             aria-label='Search'
             hx-get="/library"
             hx-trigger="input delay:1s"
-            hx-target=".main-content"
-            hx-select=".media-list"
+            hx-target="#media-list"
+            hx-select="#media-list"
+            hx-swap="outerHTML"
           )
-      ul
+      ul#nav-links
         li
           a.btn.btn-link(href="/library/favorites") Favorites
         li
           a.btn.btn-link(href='#documentation') Docs
         li
           a.btn.btn-link(href="/about") About
+    #media-control
+      .toolbar-content(
+        hx-get="/library/status"
+        hx-select="#media-control"
+        hx-trigger="every 5s"
+      )
+        p Stopped or Disconnected
 
-block content
-  main.container
-    //- Main Content
-    main.main-content(
+block main
+  main
+    section#media-list(
       hx-get="/library"
       hx-trigger="load"
-      hx-select=".media-list"
-      hx-select-oob="#bottom-toolbar")
+      hx-swap="outerHTML"
+      hx-select="#media-list"
+      hx-select-oob="#media-control")
 
     dialog#media-info-dialog
       p This is text
       button Close
 
-    //- Bottom Toolbar
     footer#bottom-toolbar
       p Disconnected
 

@@ -164,18 +164,16 @@ module.exports = function (app) {
     // Placeholder function to fetch metadata from TMDB
     // Use TMDB API to get metadata based on the title or other criteria
     // Update the record with fetched metadata
-    let searchTitle = santizeTmdbString(record.title);
 
-    // Have we already tried to use this search term? If so let's mutate it
-    if (record.searchTitle === searchTitle) {
-      searchTitle = mutateTmbString(searchTitle);
+    // record.title == the file name with the etension stripped, at the start
+
+    // If the searchTitle is not set, then we'll at least start with the filename
+    if (record.searchTitle == null || record.searchTitle == "") {
+      record.searchTitle = santizeTmdbString(record.title);
     }
 
-    console.log(
-      `Fetch metadata for record ID ${record.id}: "${record.title}" (${searchTitle})...`,
-    );
     // Example: Fetch by search
-    const searchUrl = `${tmdbUrl}/search/movie?query=${encodeURIComponent(searchTitle)}&include_adult=false&language=${tmdbPreferredLanguage}`;
+    const searchUrl = `${tmdbUrl}/search/movie?query=${encodeURIComponent(record.searchTitle)}&include_adult=false&language=${tmdbPreferredLanguage}`;
     const response = await fetch(searchUrl, { headers: tmdbAuthHeader });
     const data = await response.json();
 
@@ -211,9 +209,8 @@ module.exports = function (app) {
         );
         return await record.save();
       } else {
-        console.log(`No TMDB results found for title "${record.title}"`);
         // Save the failed search term to the record so we don't use it again
-        record.searchTitle = searchTitle;
+        // record.searchTitle = searchTitle;
         // This should already be true but...
         record.needsResync = true;
         return await record.save();
@@ -280,9 +277,11 @@ module.exports = function (app) {
       });
       hydratedEntries.push({
         id: entry.id,
+        tmdbId: entry.tmdbId,
         name: file.name,
         path: entry.path,
         title: entry.title,
+        searchTitle: entry.searchTitle,
         description: entry.description,
         favorite: entry.favorite,
         poster: entry.poster,
@@ -290,6 +289,43 @@ module.exports = function (app) {
       });
     }
     return hydratedEntries;
+  };
+
+  const sortLibraryEntries = async function (entries) {
+    return entries.sort((a, b) => {
+      let result = 0;
+      // Sort by movie title first
+      result = a.title.localeCompare(b.title);
+
+      if (!result) {
+        result = a.name.localeCompare(b.name);
+      }
+
+      return result;
+    });
+  };
+  /**
+   * The record metadata from the DB is a Sequelize model object.
+   *
+   * We need to extract the data from the model object into a plain old JS
+   * object.
+   *
+   * @param {*} entry
+   * @returns
+   */
+  const extractDbMetaData = function (entry, file = null) {
+    return {
+      id: entry.id,
+      tmdbId: entry.tmdbId,
+      name: file?.name || path.basename(entry.path, path.extname(entry.path)),
+      path: entry.path,
+      title: entry.title,
+      searchTitle: entry.searchTitle,
+      description: entry.description,
+      favorite: entry.favorite,
+      poster: entry.poster,
+      backdrop: entry.backdrop,
+    };
   };
 
   const getFile = function (filename) {
@@ -360,26 +396,117 @@ module.exports = function (app) {
     library: async function (req, res, next) {
       app.locals.debug && console.debug("Fetching library...");
       const searchTerm = req.query.search || null;
-      // getLibrary(searchTerm)
-      //   .then(library => hydrateLibraryEntries(library))
-      //   .then(hydratedLibrary => {
-      //     res.locals.render.library = hydratedLibrary
-      //     next()
-      //   })
-      //   .catch(error => {
-      //     console.error("Error fetching library:", error)
-      //     next(error)
-      //   })
 
-      // Althernative with caching
-      //
       res.locals.render.library = await app.locals.cache(
         `library${searchTerm}`,
         async () => {
-          return await hydrateLibraryEntries(await getLibrary(searchTerm));
+          return sortLibraryEntries(
+            await hydrateLibraryEntries(await getLibrary(searchTerm)),
+          );
         },
       );
-      // console.dir(res.locals.render.library, { depth: null })
+      next();
+    },
+    get: async function (req, res, next) {
+      const id = req.params.id;
+      await model
+        .findByPk(id)
+        .then(async (movie) => {
+          if (!movie) {
+            console.error(`No movie found for ${id}`);
+            res.send("404");
+          }
+
+          console.debug(`Found ${movie.path} for editing`);
+
+          res.locals.render.file = extractDbMetaData(movie);
+
+          res.locals.render.template = "movie";
+        })
+        .catch((e) => {
+          console.error(e);
+          res.send("500", e);
+        });
+      next();
+    },
+    /**
+     * Renders EDIT form
+     * @param {*} res
+     * @param {*} res
+     * @param {*} next
+     */
+    edit: async function (req, res, next) {
+      const id = req.params.id;
+      await model
+        .findByPk(id)
+        .then(async (movie) => {
+          if (!movie) {
+            console.error("No movie found for id " + id);
+            res.send("404");
+          }
+
+          console.debug(`Found ${movie.path} for editing`);
+
+          res.locals.render.file = {
+            id: movie.id,
+            searchTitle: movie.searchTitle,
+          };
+
+          res.locals.render.template = "edit";
+        })
+        .catch((e) => {
+          console.error(e);
+          res.send("500", e);
+        });
+      next();
+    },
+    update: async function (req, res, next) {
+      const id = req.params.id;
+      model
+        .findByPk(id)
+        .then(async (movie) => {
+          if (!movie) {
+            console.error("No movie found for id " + id);
+            res.send("404");
+          }
+
+          movie.searchTitle = req.body.movie["search-title"];
+
+          await movie.save();
+
+          const recordMetaData = extractDbMetaData(movie);
+
+          res.locals.render.template = "movie";
+
+          res.locals.render.file = recordMetaData;
+        })
+        .catch((e) => {
+          res.send("500", e);
+        });
+
+      next();
+    },
+    resync: async function (req, res, next) {
+      const id = req.params.id;
+      await model
+        .findByPk(id)
+        .then(async (movie) => {
+          if (!movie) {
+            console.debug(`Movie ${id} not found`);
+            res.send("404");
+          }
+          return await fetchMetadataFromTmdb(movie);
+        })
+        .then((movieMetadata) => {
+          return extractDbMetaData(movieMetadata);
+        })
+        .then((extractedmetadata) => {
+          res.locals.render.template = "movie";
+          res.locals.render.file = extractedmetadata;
+        })
+        .catch((e) => {
+          res.send("500", e);
+        });
       next();
     },
     /**
@@ -547,9 +674,8 @@ module.exports = function (app) {
       next();
     },
     render: async function (req, res) {
-      console.log("Rendering output");
       app.locals.debug && console.debug("Rendering:", res.locals.render);
-      res.render("content", res.locals.render);
+      res.render(res.locals.render?.template || "content", res.locals.render);
     },
   };
 };
