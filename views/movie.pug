@@ -2,8 +2,8 @@
 - const actionText = status.name == file.name ? "Stop" : "Play"
 article.media-item(id=`media-item-${file.id}` class= file.tmdbId ? "found" : "not-found")
   img.media-thumbnail(
-    src= file.poster
-    hx-get=`/library/${file.id}/${action}`
+    src= file.poster || "/images/movie_not_found.png"
+    hx-get= action
     hx-confirm=`Want to ${actionText.toLowerCase()} ${file.title}?`
     hx-target="#media-control"
     hx-select="#media-control"

@@ -1,8 +1,8 @@
+
 extends layout-default.pug
 
 block head
   script(defer src="https://unpkg.com/htmx.org@2.0.4", integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+", crossorigin="anonymous")
-  //- link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
   link(rel="stylesheet" href="/css/reset.css")
   link(rel="stylesheet" href="/css/tv.css")
 
@@ -11,8 +11,7 @@ block nav
     nav
       ul#nav-masthead
         li
-          strong
-            a(href="/") #{appName || 'Node.js Express Mongoose Starter'}
+          h1= appName || 'Node.js Express Mongoose Starter'
       ul#nav-search
         li.search-container.input-group.input-inline
           input.search-input.form-input(
@@ -33,13 +32,14 @@ block nav
           a.btn.btn-link(href='#documentation') Docs
         li
           a.btn.btn-link(href="/about") About
-    #media-control
-      .toolbar-content(
-        hx-get="/library/status"
-        hx-select="#media-control"
-        hx-trigger="every 5s"
-      )
-        p Stopped or Disconnected
+    #media-control(
+      hx-get="/library/status"
+      hx-target="#media-control"
+      hx-select="#media-control"
+      hx-trigger="every 5s"
+      hx-swap="outerHTML"
+    )
+      p Stopped or Disconnected
 
 block main
   main
@@ -54,8 +54,7 @@ block main
       p This is text
       button Close
 
-    footer#bottom-toolbar
-      p Disconnected
+    footer
 
 block footScripts
   script.

@@ -90,7 +90,7 @@ module.exports = function (app) {
     }
 
     // Sort files by name
-    files.sort((a, b) => a.name.localeCompare(b.name));
+    // files.sort((a, b) => a.name.localeCompare(b.name));
 
     return files;
   };
@@ -102,7 +102,7 @@ module.exports = function (app) {
   const syncFsToDb = async function (files) {
     for await (const file of files) {
       const filePath = path.join(file.path, file.name);
-      console.log(filePath);
+      console.debug(filePath);
       const [entry, created] = await createStubEntry(filePath);
       if (created) {
         console.log(`Created new database entry for file: ${filePath}`);
@@ -117,7 +117,7 @@ module.exports = function (app) {
    *
    * Sets needsResync to true so that a later process can fill in metadata from TMDB
    * @param {*} filePath
-   * @returns
+   * @returns array [object, boolean] an array where [0] is the entry and [1] is TRUE if it is a newly-created entry or FALSE if it was already created
    */
   const createStubEntry = async function (filePath) {
     return await model.findOrCreate({
@@ -275,6 +275,9 @@ module.exports = function (app) {
           path: filePath,
         },
       });
+
+      if (!entry) continue;
+
       hydratedEntries.push({
         id: entry.id,
         tmdbId: entry.tmdbId,

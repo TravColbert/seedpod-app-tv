@@ -8,17 +8,17 @@ section#media-list
       h3 No files found
 
 - const playState = (status?.state?.toLowerCase() != "stopped")
-- const refreshTime = (["playing"].includes(status?.state?.toLowerCase())) ? 1 : 50
+- const refreshTime = (["playing"].includes(status?.state?.toLowerCase())) ? 1 : 5
 - console.log("Refresh time:", refreshTime)
-
-#media-control
+#media-control(
+  hx-get="/library/status"
+  hx-target="#media-control"
+  hx-select="#media-control"
+  hx-trigger=`every ${refreshTime}s`
+  hx-swap="outerHTML"
+)
   if playState
-    .toolbar-content(
-      hx-get="/library/status"
-      hx-trigger=`every ${refreshTime}s`
-      hx-target="#media-control"
-      hx-select="#media-control"
-      hx-swap="outerHTML")
+    .toolbar-content
       .playing-info
         div#playing-file-name
           span= status.name
@@ -34,50 +34,45 @@ section#media-list
       .playing-controls
         div.toolbar-action#button-vol-down(
           hx-get=`/library/volume-down`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon 🔉
           div.toolbar-action-label Vol Down
         div.toolbar-action#button-vol-up(
           hx-get=`/library/volume-up`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon 🔊
           div.toolbar-action-label Vol Up
         div.toolbar-action#button-pause(
           hx-get=`/library/pause`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon &#x23EF;
           div.toolbar-action-label Pause
         div.toolbar-action#button-stop(
           hx-get=`/library/stop`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon &#x23F9;
           div.toolbar-action-label Stop
         div.toolbar-action#button-seek-back(
           hx-get=`/library/seek-backward`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon &#x23EA
           div.toolbar-action-label -10s
         div.toolbar-action#button-seek-forward(
           hx-get=`/library/seek-forward`
-          hx-target="#bottom-toolbar"
-          hx-select="#bottom-toolbar"
+          hx-target="#media-control"
+          hx-select="#media-control"
           hx-swap="outerHTML")
           div.toolbar-action-icon &#x23E9
           div.toolbar-action-label +10s
   else
-    .toolbar-content(
-      hx-get="/library/status"
-      hx-select="#media-control"
-      hx-trigger="every 5s"
-    )
-      p Stopped or Disconnected
+    p Stopped or Disconnected
