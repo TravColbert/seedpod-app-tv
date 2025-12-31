@@ -17,31 +17,30 @@ article.media-item(id=`media-item-${file.id}` class= file.tmdbId ? "found" : "no
     main
       .media-description= file.description || `No description found`
       //.media-search-term= file.searchTitle
-    footer.media-controls
-      button.play-stop-button(
-        hx-get= action
-        hx-target="#media-control"
-        hx-select="#media-control"
-        hx-swap="outerHTML"
-      )= actionText
       button.favorite-button(
         hx-get=`/library/${file.id}/favorite`
-      ) Fav
+      )
+        i.fa-regular.fa-heart
       button.edit-button(
         hx-get=`/library/${file.id}/edit`
         hx-target=`#media-item-${file.id}`
         hx-swap="outerHTML"
-      ) Edit
+      )
+        i.fa-regular.fa-pen-to-square
       button.info-button(
         hx-get=`/library/${file.id}/info`
         hx-target=`#media-item-${file.id}`
         hx-swap="outerHTML"
-      ) Info
+      )
+        i.fa-solid.fa-info
       button.resync-button(
         hx-get=`/library/${file.id}/resync`
         hx-target=`#media-item-${file.id}`
         hx-swap="outerHTML"
-      ) Sync
+      )
+        i.fa-solid.fa-rotate
       button.preferred-button(
         hx-get=`/library/${file.id}/preferred`
-      ) Pref
+      )
+        i.fa-regular.fa-circle-check
+    footer.media-controls

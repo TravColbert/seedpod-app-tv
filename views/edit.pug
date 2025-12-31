@@ -1,15 +1,19 @@
-article.media-item.editing(id=`media-item-${file.id}`)
-  img.media-thumbnail
+article.media-item.editing(
+  id=`media-item-${file.id}`
+  hx-target=`#media-item-${file.id}`
+  hx-select=`#media-item-${file.id}`
+  hx-swap=`outerHTML`
+)
+  img.media-thumbnail(
+    src= file.poster || "/images/movie_not_found.png"
+  )
   article.media-info.tile-content
     form(
       hx-post=`/library/${file.id}`
-      hx-target=`#media-item-${file.id}`
-      hx-select=`#media-item-${file.id}`
-      hx-swap=`outerHTML`
     )
       header
         h3.media-title= file.title
-        input(
+        input.media-title-edit(
           type=""
           id=`search-title-${file.id}`
           name="movie[search-title]"
@@ -21,6 +25,4 @@ article.media-item.editing(id=`media-item-${file.id}`)
         button.submit-stop-button(type="submit") Submit
         button.cancel-button(
           hx-get=`/library/${file.id}`
-          hx-target=`#media-item-${file.id}`
-          hx-swap="outerHTML"
         ) Cancel

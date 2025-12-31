@@ -7,7 +7,7 @@
     --grid-gap-sm: 0.5em;
     --grid-row-height: 138px;
     --padding: 1em;
-    --border-radius: 0.5em;
+    --border-radius: 8px;
 
     --body-font-size: 14px;
     --body-font-size-secondary: 12px;
@@ -27,6 +27,8 @@
     --text-color-secondary: hsla(260, 8%, 60%, 1);
     --text-color-elevated: hsla(260, 10%, 100%, 0.15);
 
+    --text-input-background: hsla(260, 14%, 20%, 1);
+
     --body-bg: hsla(260, 14%, 4%, 1);
 
     --card-movie-title-font-weight: 300;
@@ -38,7 +40,7 @@
     --card-movie-editing: hsla(37, 100%, 30%, 1);
     --card-movie-background: hsla(209, 1.42%, 4.03%, 1);
     /*--card-movie-shadow: 0 0 40px hsla(209, 100%, 30%, 0.7);*/
-    --card-movie-shadow: 0 0 40px hsla(37, 100%, 64%, 0.7);
+    --card-movie-shadow: 0 0 20px hsla(37, 100%, 64%, 0.7);
     --card-movie-metadata-found-background: linear-gradient(
         to bottom,
         var(--card-movie-found),
@@ -93,15 +95,21 @@ footer > nav {
 }
 
 button {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
     background-color: transparent;
-    border: 2px solid var(--button-border-color);
-    color: var(--button-text-color);
-    padding: 8px 24px;
+    border: 0;
+    /*border: 1px solid var(--button-border-color);*/
+    color: var(--text-color-secondary);
+    /*color: var(--button-text-color);*/
+    /*padding: 8px 24px;*/
     font-size: var(--body-font-size);
-    border-radius: var(--border-radius);
+    /*border-radius: var(--border-radius);*/
     cursor: pointer;
-    min-height: 38px;
-    min-width: 44px;
+    min-height: 40px;
+    min-width: 40px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     transition:
@@ -150,8 +158,11 @@ article > header > * {
 }
 
 #main-top-nav {
+    align-items: stretch;
     background-color: var(--body-bg);
     box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -218,12 +229,22 @@ article > header > * {
     color: var(--text-color-secondary);
 }
 
-.media-item form,
 .media-item main {
+    align-items: flex-start;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-grow: 1;
     overflow-y: auto;
+}
+
+.media-item form {
+    display: flex;
+    flex-direction: column;
+}
+
+.media-item form header {
+    display: flex;
+    flex-direction: column;
 }
 
 .media-description {
@@ -254,6 +275,16 @@ article > header > * {
     font-weight: var(--card-movie-title-font-weight);
 }
 
+.media-title-edit {
+    background-color: transparent;
+    border: 1px solid var(--button-border-color);
+    border-radius: var(--border-radius);
+    color: var(--button-text-color);
+    /*font-size: large;*/
+    font-weight: --var(body-font-weight);
+    padding: 8px 12px;
+}
+
 .media-info details {
     margin: 0;
 }
@@ -264,21 +295,9 @@ article > header > * {
     justify-content: space-between;
 }
 
-/*img {
-    background-color: var(--card-movie-not-found);
-}*/
-
-.media-controls {
+.media-description {
     display: none;
 }
-
-/*.play-stop-button,
-.info-button,
-.preferred-button,
-.edit-button,
-.resync-button {
-  display: none;
-}*/
 
 /**
  * "Remote Control" Styling
@@ -290,6 +309,7 @@ article > header > * {
     gap: var(--grid-gap-sm);
     overflow: clip;
     padding: 1rem;
+    width: 100%;
 }
 
 .playing-controls {
@@ -306,8 +326,11 @@ article > header > * {
     color: var(--button-text-color);
     display: flex;
     flex-direction: column;
+    font-size: 3em;
     height: 100%;
     width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 #button-vol-up {
